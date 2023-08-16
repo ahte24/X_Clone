@@ -15,11 +15,29 @@ abstract class IAuthAPI {
     required String email,
     required String password,
   });
+
+  FutureEither<model.Session> login({
+    required String email,
+    required String password,
+  });
+
+  Future<model.Account?> currentUserAccount();
 }
 
 class AuthAPI implements IAuthAPI {
   final Account _account;
   AuthAPI({required Account account}) : _account = account;
+  @override
+  Future<model.Account?> currentUserAccount() async {
+    try {
+      return await _account.get();
+      // ignore: unused_catch_clause
+    } on AppwriteException catch (e) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
 
   @override
   FutureEither<model.Account> signUp({
@@ -40,6 +58,30 @@ class AuthAPI implements IAuthAPI {
       ));
     } catch (e, StackTrace) {
       return left(Failure(e.toString(), StackTrace));
+    }
+  }
+
+  @override
+  FutureEither<model.Session> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final session = await _account.createEmailSession(
+        email: email,
+        password: password,
+      );
+      return right(session);
+    } on AppwriteException catch (e, StackTrace) {
+      return left(Failure(
+        e.message ?? 'Some Unexpected error occured',
+        StackTrace,
+      ));
+    } catch (e, StackTrace) {
+      return left(Failure(
+        e.toString(),
+        StackTrace,
+      ));
     }
   }
 }
