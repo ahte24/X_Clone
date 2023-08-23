@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:x_clone/common/common.dart';
-import 'package:x_clone/common/loading_page.dart';
 import 'package:x_clone/constants/constants.dart';
 import 'package:x_clone/features/auth/controller/auth_controller.dart';
 import 'package:x_clone/features/auth/view/login_view.dart';

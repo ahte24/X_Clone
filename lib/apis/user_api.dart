@@ -1,4 +1,5 @@
 import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart' as model;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:x_clone/constants/appwrite_constants.dart';
@@ -14,6 +15,7 @@ final userAPIProvider = Provider((ref) {
 
 abstract class IUserAPI {
   FutureEitherVoid saveUserData(UserModel userModel);
+  Future<model.Document> getUserData(String uid);
 }
 
 class UserAPI implements IUserAPI {
@@ -24,8 +26,8 @@ class UserAPI implements IUserAPI {
     try {
       await _db.createDocument(
         databaseId: AppwriteConstants.databaseId,
-        collectionId: AppwriteConstants.dbCollectionId,
-        documentId: ID.unique(),
+        collectionId: AppwriteConstants.userCollectionId,
+        documentId: userModel.uid,
         data: userModel.toMap(),
       );
       return right(null);
@@ -37,5 +39,14 @@ class UserAPI implements IUserAPI {
         Failure(e.toString(), stackTrace),
       );
     }
+  }
+
+  @override
+  Future<model.Document> getUserData(String uid) {
+    return _db.getDocument(
+      databaseId: AppwriteConstants.databaseId,
+      collectionId: AppwriteConstants.userCollectionId,
+      documentId: uid,
+    );
   }
 }

@@ -31,8 +31,7 @@ class AuthAPI implements IAuthAPI {
   Future<model.Account?> currentUserAccount() async {
     try {
       return await _account.get();
-      // ignore: unused_catch_clause
-    } on AppwriteException catch (e) {
+    } on AppwriteException{
       return null;
     } catch (e) {
       return null;
@@ -51,13 +50,13 @@ class AuthAPI implements IAuthAPI {
         password: password,
       );
       return right(account);
-    } on AppwriteException catch (e, StackTrace) {
+    } on AppwriteException catch (e, stackTrace) {
       return left(Failure(
         e.message ?? 'Some Unexpected error occurred',
-        StackTrace,
+        stackTrace,
       ));
-    } catch (e, StackTrace) {
-      return left(Failure(e.toString(), StackTrace));
+    } catch (e, stackTrace) {
+      return left(Failure(e.toString(), stackTrace));
     }
   }
 
@@ -72,15 +71,15 @@ class AuthAPI implements IAuthAPI {
         password: password,
       );
       return right(session);
-    } on AppwriteException catch (e, StackTrace) {
+    } on AppwriteException catch (e, stackTrace) {
       return left(Failure(
         e.message ?? 'Some Unexpected error occured',
-        StackTrace,
+        stackTrace,
       ));
-    } catch (e, StackTrace) {
+    } catch (e, stackTrace) {
       return left(Failure(
         e.toString(),
-        StackTrace,
+        stackTrace,
       ));
     }
   }
