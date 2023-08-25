@@ -32,11 +32,16 @@ class UserAPI implements IUserAPI {
       );
       return right(null);
     } on AppwriteException catch (e, stackTrace) {
-      return left(
-          Failure(e.message ?? 'Some unexpected error occured', stackTrace));
+      return left(Failure(
+        e.message ?? 'Some unexpected error occured',
+        stackTrace,
+      ));
     } catch (e, stackTrace) {
       return left(
-        Failure(e.toString(), stackTrace),
+        Failure(
+          e.toString(),
+          stackTrace,
+        ),
       );
     }
   }
