@@ -80,53 +80,58 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
       ),
       body: isLoading || currentUser == null
           ? const Loader()
-          : SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0)
-                              .copyWith(top: 20, left: 13),
-                          child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(currentUser.profilePic),
-                            radius: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 15),
-                        Expanded(
-                          child: TextField(
-                            controller: tweetTextController,
-                            style: const TextStyle(fontSize: 18),
-                            decoration: const InputDecoration(
-                              hintText: "What's happening?",
-                              hintStyle: TextStyle(
-                                color: Pallete.greyColor,
-                                fontSize: 20,
-                              ),
-                              border: InputBorder.none,
+          : Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.all(8.0).copyWith(left: 13),
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(currentUser.profilePic),
+                              radius: 20,
                             ),
-                            maxLines: null,
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: TextField(
+                              controller: tweetTextController,
+                              style: const TextStyle(fontSize: 18),
+                              decoration: const InputDecoration(
+                                hintText: "What's happening?",
+                                hintStyle: TextStyle(
+                                  color: Pallete.greyColor,
+                                  fontSize: 20,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                              maxLines: null,
+                            ),
+                          )
+                        ],
+                      ),
+                      if (images.isNotEmpty)
+                        CarouselSlider(
+                          items: images.map((file) {
+                            return Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Image.file(file));
+                          }).toList(),
+                          options: CarouselOptions(
+                            height: 400,
+                            enableInfiniteScroll: false,
                           ),
                         )
-                      ],
-                    ),
-                    if (images.isNotEmpty)
-                      CarouselSlider(
-                        items: images.map((file) {
-                          return Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: const EdgeInsets.symmetric(horizontal: 5),
-                              child: Image.file(file));
-                        }).toList(),
-                        options: CarouselOptions(
-                          height: 400,
-                          enableInfiniteScroll: false,
-                        ),
-                      )
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
