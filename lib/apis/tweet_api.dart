@@ -7,20 +7,24 @@ import 'package:x_clone/core/core.dart';
 import 'package:x_clone/core/providers.dart';
 import 'package:x_clone/models/tweet_model.dart';
 
-final tweerAPIProvider = Provider((ref) {
+final tweetAPIProvider = Provider((ref) {
   return TweetAPI(
-    db: ref.watch(appwriteDatabaseProvider),
-  );
+      db: ref.watch(appwriteDatabaseProvider),
+      realtime: ref.watch(appwriteRealtimeProvider));
 });
 
 abstract class ITweetAPI {
   FutureEither<Document> shareTweet(Tweet tweet);
   Future<List<Document>> getTweets();
+  Stream<RealtimeMessage> getLatestTweet();
 }
 
 class TweetAPI implements ITweetAPI {
   final Databases _db;
-  TweetAPI({required Databases db}) : _db = db;
+  final Realtime _realtime;
+  TweetAPI({required Databases db, required Realtime realtime})
+      : _db = db,
+        _realtime = realtime;
 
   @override
   FutureEither<Document> shareTweet(Tweet tweet) async {
@@ -53,7 +57,17 @@ class TweetAPI implements ITweetAPI {
     final document = await _db.listDocuments(
       databaseId: AppwriteConstants.databaseId,
       collectionId: AppwriteConstants.tweetCollectionId,
+      queries: [
+        Query.orderDesc('createdAt'),
+      ],
     );
     return document.documents;
+  }
+
+  @override
+  Stream<RealtimeMessage> getLatestTweet() {
+    return _realtime.subscribe([
+      'databases.${AppwriteConstants.databaseId}.collections.${AppwriteConstants.tweetCollectionId}.documents'
+    ]).stream;
   }
 }

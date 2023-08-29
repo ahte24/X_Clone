@@ -1,6 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:like_button/like_button.dart';
 import 'package:x_clone/common/common.dart';
 import 'package:x_clone/constants/assets_constants.dart';
 import 'package:x_clone/core/enums/tweet_type_enum.dart';
@@ -61,9 +65,10 @@ class TweetCard extends ConsumerWidget {
                             ),
                             // Replied to
                             Container(
-                              margin: const EdgeInsets.only(top: 10),
+                              margin: const EdgeInsets.only(
+                                top: 10,
+                              ),
                               child: HashtagText(
-                                
                                 text: tweet.text,
                               ),
                             ),
@@ -74,13 +79,13 @@ class TweetCard extends ConsumerWidget {
                               AnyLinkPreview(
                                 displayDirection:
                                     UIDirection.uiDirectionHorizontal,
-                                link: 'https://${tweet.link}',
+                                link: tweet.link,
                               )
                             ],
                             Container(
                               margin: const EdgeInsets.only(
                                 top: 10,
-                                right: 20,
+                                right: 25,
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -104,10 +109,33 @@ class TweetCard extends ConsumerWidget {
                                     onTap: () {},
                                     text: (tweet.reshareCount).toString(),
                                   ),
-                                  TweetIconButton(
-                                    pathName: AssetsConstants.likeOutlinedIcon,
-                                    onTap: () {},
-                                    text: (tweet.likes.length).toString(),
+                                  LikeButton(
+                                    size: 25,
+                                    likeBuilder: (isLiked) {
+                                      return isLiked
+                                          ? SvgPicture.asset(
+                                              AssetsConstants.likeFilledIcon,
+                                              color: Pallete.redColor,
+                                            )
+                                          : SvgPicture.asset(
+                                              AssetsConstants.likeOutlinedIcon,
+                                              color: Pallete.greyColor,
+                                            );
+                                    },
+                                    likeCount: tweet.likes.length,
+                                    countBuilder: ((likeCount, isLiked, text) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(left: 2),
+                                        child: Text(
+                                          text,
+                                          style: TextStyle(
+                                            color: isLiked
+                                                ? Pallete.redColor
+                                                : Pallete.whiteColor,
+                                          ),
+                                        ),
+                                      );
+                                    }),
                                   ),
                                   IconButton(
                                     onPressed: () {},

@@ -27,17 +27,19 @@ class _CarouselImageState extends State<CarouselImage> {
                   return Container(
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(25)),
-                    margin: const EdgeInsets.all(15),
-                    child: Image.network(
-                      link,
-                      fit: BoxFit.contain,
+                    margin: const EdgeInsets.all(10),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        link,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   );
                 },
               ).toList(),
               options: CarouselOptions(
                 viewportFraction: 1,
-                height: 400,
                 enableInfiniteScroll: false,
                 onPageChanged: ((index, reason) {
                   setState(() {
@@ -47,19 +49,23 @@ class _CarouselImageState extends State<CarouselImage> {
               ),
             ),
             Row(
-              children: widget.imageLinks.asMap().entries.map((e) {
-                return Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                  ),
-                  decoration: BoxDecoration(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: widget.imageLinks.asMap().entries.map(
+                (e) {
+                  return Container(
+                    width: 8,
+                    height: 8,
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                    ),
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white
-                          .withOpacity(_current == e.key ? 0.9 : 0.4)),
-                );
-              }).toList(),
+                          .withOpacity(_current == e.key ? 1.0 : 0.3),
+                    ),
+                  );
+                },
+              ).toList(),
             ),
           ],
         )
